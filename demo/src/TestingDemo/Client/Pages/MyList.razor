@@ -1,13 +1,34 @@
 ﻿@page "/mylist"
 
-
+@inject ITodoClient Client
 @attribute [Authorize]
 
 
 <h3>MyList</h3>
+<hr/>
 
+<div class="row">
+    <div class="col-md-8">
+        <NewTodoItem />
+        <hr />
+        <TodoList Items="todoItems"/>
+    </div>
+    <div class="col-md-4">
+        <TodoItemDetail Item="selectedTodoItem"/>
+    </div>
+</div>
 
 
 @code {
+    private IList<TodoItem> todoItems = new List<TodoItem>();
 
+    private TodoItem? selectedTodoItem = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        var items = await Client.GetAllAsync();
+        this.todoItems = items.ToList();
+    }
 }

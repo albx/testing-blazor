@@ -1,0 +1,56 @@
+﻿@inject IJSRuntime Js
+
+@if (!Items.Any())
+{
+    <h2>Nothing to do here...</h2>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th>Title</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Items)
+            {
+                <tr>
+                    <td><input type="checkbox" @bind="item.IsDone" /></td>
+                    <td>@item.Title</td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" @onclick="@(() => EditItem(item))" class="btn btn-primary">Edit</button>
+                            <button type="button" class="btn btn-danger">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public IEnumerable<TodoItem> Items { get; set; } = Array.Empty<TodoItem>();
+
+    [Parameter]
+    public EventCallback<TodoItem> OnTodoItemSelected { get; set; }
+
+    [Parameter]
+    public EventCallback<TodoItem> OnDeleteTodoItemConfirmed { get; set; }
+
+    async Task EditItem(TodoItem item) => await OnTodoItemSelected.InvokeAsync(item);
+
+    async Task DeleteTodoItem(TodoItem item)
+    {
+        var result = await Js.InvokeAsync<bool>("confirm", $"You are going to delete item {item.Title}. Are you sure?");
+        if (result)
+        {
+            await OnDeleteTodoItemConfirmed.InvokeAsync(item);
+        }
+    }
+}

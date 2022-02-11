@@ -1,0 +1,33 @@
+﻿@if (Item is null)
+{
+    <h2>Please, select an item from the list</h2>
+}
+else
+{
+    <EditForm Model="Item" role="form" class="col-md-12" OnValidSubmit="EditTodoItem">
+        <DataAnnotationsValidator />
+        <div class="form-group">
+            <label>Title</label>
+            <InputText class="form-control" @bind-Value="Item.Title" />
+            <ValidationMessage For="@(() => Item.Title)" />
+        </div>
+        <div class="form-group">
+            <div class="btn-group">
+                <button type="button" class="btn btn-outline-primary">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </EditForm>
+}
+
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public TodoItem? Item { get; set; }
+
+    [Parameter]
+    public EventCallback<TodoItem> OnTodoItemUpdated { get; set; }
+
+    async Task EditTodoItem() => await OnTodoItemUpdated.InvokeAsync(Item);
+}

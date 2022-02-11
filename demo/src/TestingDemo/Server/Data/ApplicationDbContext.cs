@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
+﻿using Duende.IdentityServer.EntityFramework.Options;
+using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Duende.IdentityServer.EntityFramework.Options;
 using TestingDemo.Server.Models;
+using TestingDemo.Shared.Todo;
 
 namespace TestingDemo.Server.Data;
 
@@ -13,4 +14,6 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
         IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
     {
     }
+
+    public DbSet<TodoItem> Todos { get; set; }
 }

@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using TestingDemo.Server.Data;
 using TestingDemo.Server.Models;
+using TestingDemo.Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +20,8 @@ builder.Services.AddIdentityServer()
 
 builder.Services.AddAuthentication()
     .AddIdentityServerJwt();
+
+builder.Services.AddScoped<TodoService>();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();

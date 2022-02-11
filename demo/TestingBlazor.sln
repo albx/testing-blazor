@@ -1,29 +1,26 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30114.105
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32126.317
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{359D3C52-695C-4E61-8043-47AB3DB61B00}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestingDemo", "TestingDemo", "{ECC49D94-1C4C-4F75-8C1D-3EDF32DB298A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingDemo.Client", "src\TestingDemo\Client\TestingDemo.Client.csproj", "{5F8B4690-A3DF-42EE-9B7C-DCBA5B86D2CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestingDemo.Client", "src\TestingDemo\Client\TestingDemo.Client.csproj", "{5F8B4690-A3DF-42EE-9B7C-DCBA5B86D2CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingDemo.Shared", "src\TestingDemo\Shared\TestingDemo.Shared.csproj", "{8B5B75BA-30F6-46EB-91F8-0DA6E51F59DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestingDemo.Shared", "src\TestingDemo\Shared\TestingDemo.Shared.csproj", "{8B5B75BA-30F6-46EB-91F8-0DA6E51F59DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingDemo.Server", "src\TestingDemo\Server\TestingDemo.Server.csproj", "{FDA9CEA0-9412-4EC9-9F8F-0C19E16BE0EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestingDemo.Server", "src\TestingDemo\Server\TestingDemo.Server.csproj", "{FDA9CEA0-9412-4EC9-9F8F-0C19E16BE0EC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{C47D0D1B-2E72-4BF2-99FF-0C8219EE28BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingDemo.Client.Test", "tests\TestingDemo.Client.Test\TestingDemo.Client.Test.csproj", "{6BBA63EB-9628-48A5-AB95-31DBFB55C4D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestingDemo.Client.Test", "tests\TestingDemo.Client.Test\TestingDemo.Client.Test.csproj", "{6BBA63EB-9628-48A5-AB95-31DBFB55C4D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{5F8B4690-A3DF-42EE-9B7C-DCBA5B86D2CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -43,11 +40,17 @@ Global
 		{6BBA63EB-9628-48A5-AB95-31DBFB55C4D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BBA63EB-9628-48A5-AB95-31DBFB55C4D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{ECC49D94-1C4C-4F75-8C1D-3EDF32DB298A} = {359D3C52-695C-4E61-8043-47AB3DB61B00}
 		{5F8B4690-A3DF-42EE-9B7C-DCBA5B86D2CE} = {ECC49D94-1C4C-4F75-8C1D-3EDF32DB298A}
 		{8B5B75BA-30F6-46EB-91F8-0DA6E51F59DB} = {ECC49D94-1C4C-4F75-8C1D-3EDF32DB298A}
 		{FDA9CEA0-9412-4EC9-9F8F-0C19E16BE0EC} = {ECC49D94-1C4C-4F75-8C1D-3EDF32DB298A}
 		{6BBA63EB-9628-48A5-AB95-31DBFB55C4D4} = {C47D0D1B-2E72-4BF2-99FF-0C8219EE28BD}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {457DDCF3-BAAD-4220-8108-655E190C0E3D}
 	EndGlobalSection
 EndGlobal

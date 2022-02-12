@@ -49,6 +49,12 @@ public class TodoHttpClient : ITodoClient
         ThrowIfInvalidResponse(response, "Error deleting item");
     }
 
+    public async Task MarkTodoItemAsDone(Guid todoId)
+    {
+        var response = await Client.PatchAsync($"{ApiResource}/{todoId}", null);
+        ThrowIfInvalidResponse(response, "Error updating item");
+    }
+
     private void ThrowIfInvalidResponse(HttpResponseMessage response, string errorMessage)
     {
         if (!response.IsSuccessStatusCode)

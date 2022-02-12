@@ -53,4 +53,16 @@ public class TodoService
         Context.Todos.Remove(item);
         await Context.SaveChangesAsync();
     }
+
+    public async Task MarkTodoItemAsDone(Guid todoId)
+    {
+        var item = Context.Todos.SingleOrDefault(t => t.Id == todoId);
+        if (item == null)
+        {
+            throw new ArgumentOutOfRangeException(nameof(item));
+        }
+
+        item.IsDone = !item.IsDone;
+        await Context.SaveChangesAsync();
+    }
 }

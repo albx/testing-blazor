@@ -16,9 +16,14 @@
 @code {
     private ViewModel model = new();
 
+    [Parameter]
     public EventCallback<string> OnNewTodoItemAdded { get; set; }
 
-    async Task CreateNewTodoItem() => await OnNewTodoItemAdded.InvokeAsync(model.Title);
+    async Task CreateNewTodoItem()
+    {
+        await OnNewTodoItemAdded.InvokeAsync(model.Title);
+        model = new();
+    }
 
     record ViewModel
     {

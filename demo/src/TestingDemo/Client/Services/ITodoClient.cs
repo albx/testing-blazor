@@ -13,4 +13,6 @@ public interface ITodoClient
     Task UpdateTodoItemAsync(Guid todoId, TodoItem item);
 
     Task DeleteTodoItemAsync(Guid todoId);
+
+    Task MarkTodoItemAsDone(Guid todoId);
 }

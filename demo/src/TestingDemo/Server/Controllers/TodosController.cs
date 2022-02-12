@@ -57,6 +57,20 @@ namespace TestingDemo.Server.Controllers
             }
         }
 
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> MarkTodoItemAsDone(Guid id)
+        {
+            try
+            {
+                await Service.MarkTodoItemAsDone(id);
+                return NoContent();
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return NotFound();
+            }
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTodo(Guid id)
         {

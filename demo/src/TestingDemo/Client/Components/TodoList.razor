@@ -11,19 +11,19 @@ else
             <tr>
                 <th>&nbsp;</th>
                 <th>Title</th>
-                <th></th>
+                <th>&nbsp;</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Items)
             {
-                <tr>
-                    <td><input type="checkbox" @bind="item.IsDone" /></td>
-                    <td>@item.Title</td>
+                <tr class="@GetItemCssClass(item)">
+                    <td><input type="checkbox" @onclick="@(() => MarkItemAsDone(item))" @bind="item.IsDone" /></td>
+                    <td class="item-title">@item.Title</td>
                     <td>
                         <div class="btn-group">
-                            <button type="button" @onclick="@(() => EditItem(item))" class="btn btn-primary">Edit</button>
-                            <button type="button" class="btn btn-danger">Delete</button>
+                            <button type="button" disabled="@item.IsDone" @onclick="@(() => EditItem(item))" class="btn btn-primary">Edit</button>
+                            <button type="button" @onclick="@(() => DeleteTodoItem(item))" class="btn btn-danger">Delete</button>
                         </div>
                     </td>
                 </tr>
@@ -43,6 +43,9 @@ else
     [Parameter]
     public EventCallback<TodoItem> OnDeleteTodoItemConfirmed { get; set; }
 
+    [Parameter]
+    public EventCallback<TodoItem> OnTodoItemChanged { get; set; }
+
     async Task EditItem(TodoItem item) => await OnTodoItemSelected.InvokeAsync(item);
 
     async Task DeleteTodoItem(TodoItem item)
@@ -53,4 +56,11 @@ else
             await OnDeleteTodoItemConfirmed.InvokeAsync(item);
         }
     }
+
+    async Task MarkItemAsDone(TodoItem item)
+    {
+        await OnTodoItemChanged.InvokeAsync(item);
+    }
+
+    string GetItemCssClass(TodoItem item) => item.IsDone ? "is-done" : string.Empty;
 }

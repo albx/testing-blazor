@@ -1,0 +1,3 @@
+﻿.is-done > td.item-title {
+    text-decoration: line-through;
+}

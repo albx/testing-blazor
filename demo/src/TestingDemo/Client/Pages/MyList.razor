@@ -1,0 +1,125 @@
+﻿@page "/mylist"
+
+@inject ITodoClient Client
+@attribute [Authorize]
+
+
+<h3>MyList</h3>
+<hr />
+
+<div class="row">
+    <div class="col-md-8">
+        @if (!string.IsNullOrWhiteSpace(newTodoErrorMessage))
+        {
+            <div class="alert alert-danger" id="addErrorContainer">
+                @newTodoErrorMessage
+            </div>
+            <hr />
+        }
+        <NewTodoItem OnNewTodoItemAdded="AddNewTodoItem" />
+        <hr />
+
+        @if (!string.IsNullOrWhiteSpace(todoListErrorMessage))
+        {
+            <div class="alert alert-danger" id="listErrorContainer">
+                @todoListErrorMessage
+            </div>
+            <hr />
+        }
+        <TodoList Items="todoItems"
+                  OnTodoItemSelected="SelectTodoItem"
+                  OnDeleteTodoItemConfirmed="DeleteTodoItem"
+                  OnTodoItemChanged="MarkTodoItemAsDone"/>
+    </div>
+    <div class="col-md-4">
+        @if (!string.IsNullOrWhiteSpace(updateTodoItemErrorMessage))
+        {
+            <div class="alert alert-danger" id="updateErrorContainer">
+                @updateTodoItemErrorMessage
+            </div>
+            <hr />
+        }
+        <TodoItemDetail Item="selectedTodoItem"
+                        OnTodoItemUpdated="UpdateTodoItem"
+                        OnSelectionCancelled="ClearSelection"/>
+    </div>
+</div>
+
+
+@code {
+    private IList<TodoItem> todoItems = new List<TodoItem>();
+
+    private TodoItem? selectedTodoItem = null;
+
+    private string? newTodoErrorMessage = null;
+    private string? todoListErrorMessage = null;
+    private string? updateTodoItemErrorMessage = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        var items = await Client.GetAllAsync();
+        this.todoItems = items.ToList();
+    }
+
+    async Task AddNewTodoItem(string newTodoItemTitle)
+    {
+        var todoItem = new TodoItem { Id = Guid.NewGuid(), Title = newTodoItemTitle, IsDone = false };
+
+        try
+        {
+            await Client.CreateNewTodoItemAsync(todoItem);
+            todoItems.Add(todoItem);
+        }
+        catch (Exception ex)
+        {
+            newTodoErrorMessage = ex.Message;
+        }
+    }
+
+    void SelectTodoItem(TodoItem item)
+    {
+        selectedTodoItem = item;
+    }
+
+    async Task DeleteTodoItem(TodoItem item)
+    {
+        try
+        {
+            await Client.DeleteTodoItemAsync(item.Id);
+            todoItems.Remove(item);
+        }
+        catch (Exception ex)
+        {
+            todoListErrorMessage = ex.Message;
+        }
+    }
+
+    async Task UpdateTodoItem(TodoItem item)
+    {
+        try
+        {
+            await Client.UpdateTodoItemAsync(item.Id, item);
+            selectedTodoItem = null;
+        }
+        catch (Exception ex)
+        {
+            updateTodoItemErrorMessage = ex.Message;
+        }
+    }
+
+    async Task MarkTodoItemAsDone(TodoItem item)
+    {
+        try
+        {
+            await Client.MarkTodoItemAsDone(item.Id);
+        }
+        catch (Exception ex)
+        {
+            todoListErrorMessage = ex.Message;
+        }
+    }
+
+    void ClearSelection() => selectedTodoItem = null;
+}

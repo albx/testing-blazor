@@ -1,0 +1,33 @@
+﻿@using System.ComponentModel.DataAnnotations
+<EditForm Model="model" role="form" OnValidSubmit="CreateNewTodoItem" class="col-md-12">
+    <DataAnnotationsValidator />
+    <div class="row">
+        <label class="col col-auto">Title</label>
+        <div class="col form-group">
+            <InputText @bind-Value="model.Title" class="form-control" />
+            <ValidationMessage For="@(() => model.Title)" />
+        </div>
+        <div class="col form-group">
+            <button class="btn btn-primary" type="submit">Add new</button>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    private ViewModel model = new();
+
+    [Parameter]
+    public EventCallback<string> OnNewTodoItemAdded { get; set; }
+
+    async Task CreateNewTodoItem()
+    {
+        await OnNewTodoItemAdded.InvokeAsync(model.Title);
+        model = new();
+    }
+
+    record ViewModel
+    {
+        [Required]
+        public string Title { get; set; } = string.Empty;
+    }
+}

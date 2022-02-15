@@ -1,0 +1,29 @@
+﻿@page "/"
+
+@inject NavigationManager Navigation
+
+<PageTitle>Index</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<SurveyPrompt Title="How is Blazor working for you?" />
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="input-group">
+            <input type="text" class="form-control" id="query" placeholder="Search something..." @bind="query" />
+            <button type="button" class="btn btn-outline-primary" id="search" @onclick="Search">Search</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string query = string.Empty;
+
+    void Search()
+    {
+        Navigation.NavigateTo($"search?query={query}");
+    }
+}

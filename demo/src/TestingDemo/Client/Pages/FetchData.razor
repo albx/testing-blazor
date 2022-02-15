@@ -1,6 +1,8 @@
 ﻿@page "/fetchdata"
+
 @attribute [Authorize]
-@inject HttpClient Http
+@inject IWeatherForecastClient Client
+@inject PersistentComponentState State
 
 <PageTitle>Weather forecast</PageTitle>
 
@@ -42,13 +44,19 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        try
+        State.RegisterOnPersisting(PersistForecasts);
+
+        if (!State.TryTakeFromJson<WeatherForecast[]?>("weather-data", out var weatherForecasts))
         {
-            forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
+            weatherForecasts = await Client.GetWeatherForecastsAsync();
         }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
+
+        forecasts = weatherForecasts;
+    }
+
+    private Task PersistForecasts()
+    {
+        State.PersistAsJson("weather-data", forecasts);
+        return Task.CompletedTask;
     }
 }

@@ -14,6 +14,9 @@ builder.Services.AddHttpClient("TestingDemo.ServerAPI", client => client.BaseAdd
 builder.Services.AddHttpClient<ITodoClient, TodoHttpClient>(client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
     .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
+builder.Services.AddHttpClient<IWeatherForecastClient, WeatherForecastHttpClient>(client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
+    .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
+
 // Supply HttpClient instances that include access tokens when making requests to the server project
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("TestingDemo.ServerAPI"));
 

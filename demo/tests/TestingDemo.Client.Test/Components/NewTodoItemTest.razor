@@ -4,12 +4,27 @@
     [Fact]
     public void NewTodoItem_Should_Display_Validation_Error_Message_If_Form_Is_Invalid()
     {
-        throw new NotImplementedException();
+        var component = Render(@<NewTodoItem />);
+        var form = component.Find("form");
+
+        form.Submit();
+
+        Assert.NotNull(component.Find("div.validation-message"));
     }
 
     [Fact]
     public void NewTodoItem_Should_Send_New_Todo_Item_Title_If_Form_Is_Valid()
     {
-        throw new NotImplementedException();
+        string todoItemSubmittedTitle = string.Empty;
+        Action<string> submitHandler = title => todoItemSubmittedTitle = title;
+
+        var component = Render(@<NewTodoItem OnNewTodoItemAdded="submitHandler" />);
+
+        var form = component.Find("form");
+
+        component.Find("input").Change("test");
+        form.Submit();
+
+        Assert.Equal("test", todoItemSubmittedTitle);
     }
 }

@@ -4,6 +4,11 @@
     [Fact]
     public void TodoItemDetail_Should_Set_Item_Parameter_Correctly()
     {
-        throw new NotImplementedException();
+        var item = new TodoItem { Id = Guid.NewGuid(), Title = "test", IsDone = false };
+
+        var component = RenderComponent<TodoItemDetail>(
+            parameters => parameters.Add(p => p.Item, item));
+
+        Assert.Equal(item, component.Instance.Item);
     }
 }

@@ -4,6 +4,11 @@
     [Fact]
     public void Search_Should_Display_Query_Correctly()
     {
-        throw new NotImplementedException();
+        var component = Render(@<Search Query="test" />);
+
+        component.MarkupMatches(@<text>
+            <h3>Search</h3>
+            <p>You searched <strong>test</strong></p>
+        </text>);
     }
 }

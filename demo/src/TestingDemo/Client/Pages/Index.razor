@@ -24,6 +24,6 @@ Welcome to your new app.
 
     void Search()
     {
-        Navigation.NavigateTo($"search?query={query}");
+        Navigation.NavigateTo($"search?query={System.Web.HttpUtility.UrlEncode(query)}");
     }
 }

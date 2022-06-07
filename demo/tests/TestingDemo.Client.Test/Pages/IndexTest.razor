@@ -15,7 +15,7 @@
         input.Change(query);
         button.Click();
 
-        var expectedUrl = navigationManager.ToAbsoluteUri($"search?query={query}").ToString();
+        var expectedUrl = navigationManager.ToAbsoluteUri($"search?query={System.Web.HttpUtility.UrlEncode(query)}").ToString();
         Assert.Equal(expectedUrl, navigationManager.Uri);
     }
 }

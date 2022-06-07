@@ -2,7 +2,6 @@
 
 @attribute [Authorize]
 @inject IWeatherForecastClient Client
-@inject PersistentComponentState State
 
 <PageTitle>Weather forecast</PageTitle>
 
@@ -44,19 +43,6 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        State.RegisterOnPersisting(PersistForecasts);
-
-        if (!State.TryTakeFromJson<WeatherForecast[]?>("weather-data", out var weatherForecasts))
-        {
-            weatherForecasts = await Client.GetWeatherForecastsAsync();
-        }
-
-        forecasts = weatherForecasts;
-    }
-
-    private Task PersistForecasts()
-    {
-        State.PersistAsJson("weather-data", forecasts);
-        return Task.CompletedTask;
+        forecasts = await Client.GetWeatherForecastsAsync();
     }
 }

@@ -3,24 +3,89 @@
 @code {
     public MyListTest()
     {
-        
+        this.AddTestAuthorization();
     }
 
     [Fact]
     public void MyList_Should_Add_New_Todo_Item()
     {
-        throw new NotImplementedException();
+        this.ComponentFactories.AddStub<TodoItemDetail>();
+
+        var clientMock = new Mock<ITodoClient>();
+
+        Services.AddSingleton(clientMock.Object);
+
+        var component = Render(@<MyList />);
+
+        var form = component.Find("form");
+        var input = component.Find("form input");
+        input.Change("test");
+
+        form.Submit();
+
+        var addedTodos = component.FindAll("table>tbody>tr>td.item-title").Select(r => r.TextContent);
+
+        clientMock.Verify(c => c.CreateNewTodoItemAsync(It.Is<TodoItem>(t => t.Title == "test")), Times.Once);
+        Assert.Single(addedTodos);
+        Assert.Equal("test", addedTodos.First());
     }
 
     [Fact]
     public void MyList_Should_Remove_Todo_Item_If_Deleted()
     {
-        throw new NotImplementedException();
+        var item = new TodoItem { Id = Guid.NewGuid(), Title = "test", IsDone = false };
+
+        this.ComponentFactories
+            .AddStub<NewTodoItem>()
+            .AddStub<TodoItemDetail>();
+
+        var clientMock = new Mock<ITodoClient>();
+        clientMock.Setup(c => c.GetAllAsync())
+            .Returns(Task.FromResult<IEnumerable<TodoItem>>(new[] { item }));
+
+        Services.AddSingleton(clientMock.Object);
+
+        JSInterop.Setup<bool>("confirm", $"You are going to delete item {item.Title}. Are you sure?").SetResult(true);
+
+        var component = Render(@<MyList />);
+
+        var deleteButton = component.FindAll("table>tbody>tr>td>div.btn-group>button").First(b => b.TextContent.Equals("delete", StringComparison.InvariantCultureIgnoreCase));
+        deleteButton.Click();
+
+        clientMock.Verify(c => c.DeleteTodoItemAsync(item.Id), Times.Once);
+        Assert.Empty(component.FindAll("table>tbody>tr"));
     }
 
     [Fact]
     public void MyList_Should_Display_Error_Message_If_Update_Returns_Errors()
     {
-        throw new NotImplementedException();
+        var item = new TodoItem { Id = Guid.NewGuid(), Title = "test", IsDone = false };
+        var expectedErrorMessage = "Error updating item test";
+
+        this.ComponentFactories
+            .AddStub<NewTodoItem>();
+
+        var clientMock = new Mock<ITodoClient>();
+        clientMock.Setup(c => c.GetAllAsync())
+            .Returns(Task.FromResult<IEnumerable<TodoItem>>(new[] { item }));
+
+        clientMock.Setup(c => c.UpdateTodoItemAsync(item.Id, It.IsAny<TodoItem>()))
+            .ThrowsAsync(new Exception(expectedErrorMessage));
+
+        Services.AddSingleton(clientMock.Object);
+
+        var component = Render(@<MyList />);
+
+        var editButton = component.FindAll("table>tbody>tr>td>div.btn-group>button").First(b => b.TextContent.Equals("edit", StringComparison.InvariantCultureIgnoreCase));
+        editButton.Click();
+
+        var form = component.Find("form");
+        var input = component.Find("form input");
+        input.Change("test updated");
+
+        form.Submit();
+
+        var errorMessageComponent = component.Find("div#updateErrorContainer");
+        Assert.Equal(expectedErrorMessage, errorMessageComponent.TextContent);
     }
 }

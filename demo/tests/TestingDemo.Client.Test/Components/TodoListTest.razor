@@ -4,18 +4,44 @@
     [Fact]
     public void TodoList_Should_Display_No_Content_Message_If_Items_Is_Empty()
     {
-        throw new NotImplementedException();
+        var items = Array.Empty<TodoItem>();
+        var component = Render(@<TodoList Items="items" />);
+
+        component.MarkupMatches(@<h2>Nothing to do here...</h2>);
     }
 
     [Fact]
     public void TodoList_Should_Display_All_Items()
     {
-        throw new NotImplementedException();
+        var items = new[]
+        {
+            new TodoItem { Id = Guid.NewGuid(), IsDone = false, Title = "test" }
+        };
+
+        var component = Render(@<TodoList Items="items" />);
+        Assert.Single(component.FindAll("table > tbody > tr"));
+
+        Assert.Equal(items.First().Title, component.Find("table > tbody > tr > td.item-title").TextContent);
     }
 
     [Fact]
     public void TodoList_Should_Raise_OnDeleteTodoItemConfirmed_Event_If_Confirmed()
     {
-        throw new NotImplementedException();
+        var items = new[]
+        {
+            new TodoItem { Id = Guid.NewGuid(), IsDone = false, Title = "test" }
+        };
+
+        TodoItem itemToDelete = new();
+
+        JSInterop.Setup<bool>("confirm", $"You are going to delete item {items.First().Title}. Are you sure?").SetResult(true);
+        Action<TodoItem> clickHandler = (item) => itemToDelete = item;
+
+        var component = Render(@<TodoList Items="items" OnDeleteTodoItemConfirmed="clickHandler"/>);
+
+        var deleteButton = component.Find("table > tbody > tr > td > div.btn-group > button.btn-danger");
+        deleteButton.Click();
+
+        Assert.Equal(items.First(), itemToDelete);
     }
 }

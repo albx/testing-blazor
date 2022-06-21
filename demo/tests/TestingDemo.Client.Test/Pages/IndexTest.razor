@@ -4,6 +4,18 @@
     [Fact]
     public void Index_Should_Redirect_To_Search_Page_When_Clicked_On_Search_Button()
     {
-        throw new NotImplementedException();
+        var navigationManager = Services.GetRequiredService<FakeNavigationManager>();
+
+        string query = "test query";
+
+        var component = Render(@<Index />);
+        var input = component.Find("input#query");
+        var button = component.Find("button#search");
+
+        input.Change(query);
+        button.Click();
+
+        var expectedUrl = navigationManager.ToAbsoluteUri($"search?query={System.Web.HttpUtility.UrlEncode(query)}").ToString();
+        Assert.Equal(expectedUrl, navigationManager.Uri);
     }
 }
